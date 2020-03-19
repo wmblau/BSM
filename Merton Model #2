@@ -1,0 +1,28 @@
+## BSM
+
+# S: underlying stock price
+# K: Option strike price
+# r: risk free rate
+# D: dividend value
+# vol: Volatility
+# T: time to expiry 
+
+def d1_calc(S, K, r, vol, T, t):
+    # Calculates d1 in the BSM equation
+    return (np.log(S/K) + (r + 0.5 * vol**2)*(T-t))/(vol*np.sqrt(T-t))
+
+def BS_call(S, K, r, vol, T, t):
+    d1 = d1_calc(S, K, r, vol, T, t)
+    d2 = d1 - vol * np.sqrt(T)
+    return S * norm.cdf(d1) - K * np.exp(-r*T)*norm.cdf(d2)
+
+def BS_put(S, K, r, vol, T, t):
+    return BS_call(S, K, r, vol, T, t) - S + np.exp(-r*(T-t))*K
+
+#def BS_binary_call(S, K, r, vol, T, t):
+#    d1 = d1_calc(S, K, r, vol, T, t)
+#    d2 = d1 - vol * np.sqrt(T-t)
+#    return np.exp(-r*T)*norm.cdf(d2)
+
+#def BS_binary_put(S, K, r, vol, T, t):
+#    return BS_binary_call(S, K, r, vol, T,t) - S + np.exp(-r*(T-t))*K
